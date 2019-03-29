@@ -14,11 +14,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.UUID;
 
 public class CrimeListFragment extends Fragment {
  private RecyclerView mCrimeRecyclerView;
  private CrimeAdapter mAdapter;
  private ImageView mSolvedImageView;
+ private int position;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,7 +42,7 @@ public class CrimeListFragment extends Fragment {
        mAdapter = new CrimeAdapter(crimes);
        mCrimeRecyclerView.setAdapter(mAdapter);
    }else{
-       mAdapter.notifyDataSetChanged();
+       mAdapter.notifyItemChanged(position);
    }
  }
 
@@ -66,7 +68,8 @@ public class CrimeListFragment extends Fragment {
 
    @Override
    public void onClick(View view){
-       Intent intent = MainActivity.newIntent(getActivity(),mCrime.getmId());
+       position = getAdapterPosition();
+       Intent intent = CrimePagerActivity.newIntent(getActivity(),mCrime.getmId());
        startActivity(intent);
    }
 

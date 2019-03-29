@@ -1,6 +1,7 @@
 package com.example.mura.criminalntentd;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,7 @@ public class CrimeLab {
 
     public Crime getCrime(UUID id){
         for(Crime crime : mCrimes){
+            Log.d("variant", String.valueOf(id.compareTo(crime.getmId())));
             if(crime.getmId().equals(id)){
                 return crime;
             }
