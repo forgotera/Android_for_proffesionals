@@ -8,7 +8,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.Button;
 
+import java.io.BufferedReader;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,7 +43,6 @@ public class CrimePagerActivity extends AppCompatActivity {
         mViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
             @Override
             public Fragment getItem(int position) {
-
                 Crime crime = mCrimes.get(position);
                 return CrimeFragment.newInstance(crime.getmId());
             }
@@ -58,5 +61,6 @@ public class CrimePagerActivity extends AppCompatActivity {
                 break;
             }
         }
+
     }
 }
