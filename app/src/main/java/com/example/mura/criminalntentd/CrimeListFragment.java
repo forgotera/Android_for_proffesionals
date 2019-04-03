@@ -58,6 +58,7 @@ public class CrimeListFragment extends Fragment {
        mAdapter = new CrimeAdapter(crimes);
        mCrimeRecyclerView.setAdapter(mAdapter);
    }else{
+       mAdapter.setmCrimes(crimes);
        mAdapter.notifyItemChanged(position);
    }
 
@@ -76,6 +77,7 @@ public class CrimeListFragment extends Fragment {
       private TextView mTitleTextView;
       private TextView mDateTextView;
       private Crime mCrime;
+
 
       public CrimeHolder(LayoutInflater inflater, ViewGroup parent){
           super(inflater.inflate(R.layout.list_item_crime,parent,false));
@@ -105,6 +107,10 @@ public class CrimeListFragment extends Fragment {
   //создание нового объекта ViewHolder
   private class CrimeAdapter extends RecyclerView.Adapter<CrimeHolder>{
    private List<Crime> mCrimes;
+
+   public void setmCrimes(List<Crime> crimes){
+       mCrimes = crimes;
+   }
 
    public CrimeAdapter(List<Crime> crimes){
     mCrimes = crimes;

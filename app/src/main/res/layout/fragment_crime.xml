@@ -29,6 +29,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/crime_date"/>
 
+
     <CheckBox
         android:id="@+id/crime_solved"
         android:layout_width="match_parent"
