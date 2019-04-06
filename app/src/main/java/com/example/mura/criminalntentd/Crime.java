@@ -41,6 +41,10 @@ public class Crime {
         this.mDate = mDate;
     }
 
+    public String getPhotoFileName(){
+        return "IMG"+ getmId().toString() + ".jpg";
+    }
+
     public String getmSuspect(){
         return mSuspect;
     }

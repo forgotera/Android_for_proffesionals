@@ -11,6 +11,7 @@ import com.example.mura.criminalntentd.database.CrimeCursorWrapper;
 import com.example.mura.criminalntentd.database.CrimeDbShema;
 import com.example.mura.criminalntentd.database.CrimeDbShema.CrimeTable.Cols;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -103,6 +104,11 @@ public class CrimeLab {
                 null,null,null
         );
         return new CrimeCursorWrapper(cursor);
+    }
+
+    public File getPhotoFile(Crime crime){
+        File filesDir = mContext.getFilesDir();
+        return  new File(filesDir,crime.getPhotoFileName());
     }
 
 }
