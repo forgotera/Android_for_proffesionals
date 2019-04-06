@@ -1,6 +1,7 @@
 package com.example.mura.criminalntentd;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -46,11 +47,17 @@ public class CrimeFragment extends Fragment {
     private ImageButton mPhotoButton;
     private ImageView mPhotoView;
     private File mPhotoFile;
+    private Callbacks mCalbacks;
     private static final String ARG_CRIME_ID ="crime_id";
     private static final String DIALOG_DATE = "DialogDate";
     private static final int REQUEST_DATE = 0;
     private static final int REQUEST_CONTACT = 1;
     private static final int REQUEST_PHOTO = 2;
+
+
+    public interface Callbacks{
+        void onCrimeUpdated(Crime crime);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanseState){
@@ -69,6 +76,12 @@ public class CrimeFragment extends Fragment {
         CrimeFragment fragment = new CrimeFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(Context context){
+        super.onAttach(context);
+        mCalbacks = (Callbacks) context;
     }
 
     @Nullable
@@ -117,6 +130,7 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mCrime.setmSolved(isChecked);
+                updateCrime();
             }
         });
 
@@ -182,12 +196,13 @@ public class CrimeFragment extends Fragment {
 
         mPhotoView = (ImageView) v.findViewById(R.id.crime_photo);
         updatePhotoView();
+        updateCrime();
 
         return v;
     }
 
 
-    //переопеделяем метод чтобы получить дату установленную в классе DataPickerFragment
+    //переопеделяем метод чтобы получить информацию после вызова startActivityForResult
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
 
@@ -199,6 +214,7 @@ public class CrimeFragment extends Fragment {
             Date date = (Date)data.getSerializableExtra(DataPickerFragment.EXTRA_DATE);
             mCrime.setmDate(date);
             updateDate();
+            updateCrime();
         } else if(requestCode == REQUEST_CONTACT && data != null){
             Uri contactUri = data.getData();
             //поля значения которых должны быть возвращены запросом
@@ -218,6 +234,7 @@ public class CrimeFragment extends Fragment {
                 c.moveToFirst();
                 String suspect = c.getString(0);
                 mCrime.setmSuspect(suspect);
+                updateCrime();
                 mSuspectButton.setText(suspect);
             }finally {
                 c.close();
@@ -228,7 +245,8 @@ public class CrimeFragment extends Fragment {
                     mPhotoFile);
 
             getActivity().revokeUriPermission(uri,Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-
+            updateCrime();
+            
             updatePhotoView();
         }
 
@@ -275,6 +293,17 @@ public class CrimeFragment extends Fragment {
             Bitmap bitmap = PictureUtils.getScaledBitmap(mPhotoFile.getPath(),getActivity());
             mPhotoView.setImageBitmap(bitmap);
         }
+    }
+
+    private void updateCrime(){
+        CrimeLab.get(getActivity()).updateCrime(mCrime);
+        mCalbacks.onCrimeUpdated(mCrime);
+    }
+
+    @Override
+    public void onDetach(){
+        super.onDetach();
+        mCalbacks = null;
     }
 
 }
